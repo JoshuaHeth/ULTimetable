@@ -39,9 +39,13 @@ public class Login extends ActionBarActivity {
                             //Add further validation for student ID
                         }
                         else {
-                            Intent secondIntent = new Intent(Login.this, MainActivity.class);
-                            startActivity(secondIntent);
-                            //Login.this.finish();
+//                            Intent secondIntent = new Intent(Login.this, MainActivity.class);
+//                            startActivity(secondIntent);
+//                            //Login.this.finish();
+                            Intent intent = new Intent(Login.this, DownloadData.class);
+                            intent.putExtra("STUDENT_ID", "13029096");
+                            startService(intent);
+
                         }
                     }
                 }
