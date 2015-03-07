@@ -2,6 +2,8 @@ package com.mycompany.ultimetable;
 
 //import java.util.Locale;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 //import android.support.v4.app.Fragment;
 //import android.support.v4.app.FragmentManager;
@@ -11,12 +13,13 @@ import android.support.v4.view.ViewPager;
 //import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+import android.content.Intent;
 //import android.view.View;
 //import android.view.ViewGroup;
-import org.jsoup.Jsoup;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -42,6 +45,10 @@ public class MainActivity extends ActionBarActivity {
         }*/
         setContentView(R.layout.first_screen);
 
+        SharedPreferences sharedPref = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String userID = sharedPref.getString("studentID", "ID not found");
+
+        Toast.makeText(MainActivity.this,"Your student ID is: " + userID, Toast.LENGTH_LONG).show();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -69,10 +76,18 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
+        }*/
+        switch(id){
+            case R.id.action_settings: Intent settingsIntent =  new Intent(MainActivity.this, SettingsActivity.class); startActivity(settingsIntent);break;
+            case R.id.preferences: Toast.makeText(MainActivity.this, "Preferences was selected", Toast.LENGTH_LONG).show(); break;
+            case R.id.customise: Toast.makeText(MainActivity.this, "Customise was selected", Toast.LENGTH_LONG).show(); break;
+            case R.id.update: Toast.makeText(MainActivity.this, "Update was selected", Toast.LENGTH_LONG).show(); break;
+            case R.id.planner: Toast.makeText(MainActivity.this, "Add a meeting/agenda was selected", Toast.LENGTH_LONG).show(); break;
+            case R.id.help: Toast.makeText(MainActivity.this, "Help was selected", Toast.LENGTH_LONG).show(); break;
+            default: Toast.makeText(MainActivity.this, "Default was selected", Toast.LENGTH_LONG).show(); break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
