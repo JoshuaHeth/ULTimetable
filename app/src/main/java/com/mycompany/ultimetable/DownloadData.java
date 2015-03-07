@@ -42,7 +42,7 @@ public class DownloadData extends Service {
              SharedPreferences sharedPref = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
              studentID = sharedPref.getString("studentID", "ID not found");
 
-             if(studentID.equals(""))
+             if(!studentID.equals("") || !studentID.equals("ID not found"))
              {
                  new FetchWebsiteData().execute();
              }

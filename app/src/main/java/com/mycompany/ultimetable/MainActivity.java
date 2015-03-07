@@ -83,7 +83,7 @@ public class MainActivity extends ActionBarActivity{
             case R.id.action_settings: Intent settingsIntent =  new Intent(MainActivity.this, SettingsActivity.class); startActivity(settingsIntent);break;
             case R.id.preferences: Toast.makeText(MainActivity.this, "Preferences was selected", Toast.LENGTH_LONG).show(); break;
             case R.id.customise: Toast.makeText(MainActivity.this, "Customise was selected", Toast.LENGTH_LONG).show(); break;
-            case R.id.update: Toast.makeText(MainActivity.this, "Update was selected", Toast.LENGTH_LONG).show(); break;
+            case R.id.update: SharedPreferences sharedPref = getSharedPreferences("userInfo", Context.MODE_PRIVATE);SharedPreferences.Editor editor = sharedPref.edit();editor.putString("studentID", "");editor.apply(); break;
             case R.id.planner: Toast.makeText(MainActivity.this, "Add a meeting/agenda was selected", Toast.LENGTH_LONG).show(); break;
             case R.id.help: Toast.makeText(MainActivity.this, "Help was selected", Toast.LENGTH_LONG).show(); break;
             default: Toast.makeText(MainActivity.this, "Default was selected", Toast.LENGTH_LONG).show(); break;
