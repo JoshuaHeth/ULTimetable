@@ -4,11 +4,9 @@ import java.io.*;
 import java.util.*;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-//import android.os.Bundle;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -19,7 +17,7 @@ import org.jsoup.select.Elements;
 
 
 public class DownloadData extends Service {
-    private static final String filename = "data.date";
+    private static final String filename = "data.dat";
     private static final String URL = "http://www.timetable.ul.ie/tt2.asp?T1=";
     private String studentID;
 
@@ -38,11 +36,8 @@ public class DownloadData extends Service {
          if(intent !=  null)
          {
              //Bundle bundle = intent.getExtras();
-             //studentID = intent.getStringExtra("STUDENT_ID"); //Get student ID from the intent
-             SharedPreferences sharedPref = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-             studentID = sharedPref.getString("studentID", "ID not found");
-
-             if(!studentID.equals("") || !studentID.equals("ID not found"))
+             studentID = intent.getStringExtra("STUDENT_ID"); //Get studnet ID from the intent
+             if(studentID != "")
              {
                  new FetchWebsiteData().execute();
              }
@@ -92,7 +87,6 @@ public class DownloadData extends Service {
                         Log.d("LOG", "File was written successfully!");
                     }
                     catch (IOException ex) {
-
                     }
                 }
             }
@@ -120,36 +114,31 @@ public class DownloadData extends Service {
                 ex.printStackTrace();
             }
             days = new ArrayList<ArrayList<Session>>();
-            try {
-                Element table = doc.select("table").get(0); // Select the first table
-                Elements rows = table.select("tr");
+            Element table = doc.select("table").get(0); // Select the first table
+            Elements rows = table.select("tr");
 
-                for (int i = 1; i < rows.size(); i++) { //first row is the Weekdays names so skip it.
-                    Element row = rows.get(i);
-                    Elements cols = row.select("td"); //Select each column
+            for (int i = 1; i < rows.size(); i++) { //first row is the Weekdays names so skip it.
+                Element row = rows.get(i);
+                Elements cols = row.select("td"); //Select each column
 
-                    //Iterate through each column.
-                    //Each column is a day of the week.
-                    for (int j = 0; j < cols.size(); j++) {
-                        //Create a new ArrayList to hold the Session for a new days
-                        ArrayList<Session> list = new ArrayList<Session>();
+                //Iterate through each column.
+                //Each colmun is a day of the week.
+                for (int j = 0; j < cols.size(); j++) {
+                    //Create a new Arraylist to hold the Session for a new days
+                    ArrayList<Session> list = new ArrayList<Session>();
 
-                        Elements p = cols.get(j).select("p");
-                        //Get individual sessions within <p></p> tags from each column.
-                        //Each column contains all the schedules for that day.
-                        for (int k = 0; k < p.size(); k++) {
-                            slotEntry = p.get(k).text();
-                            slotEntry = slotEntry.trim();
-                            if (!slotEntry.equals("")) {
-                                addSession(list, slotEntry);//j: Weekday
-                            }
+                    Elements p = cols.get(j).select("p");
+                    //Get individual sessions within <p></p> tags from each column.
+                    //Each column contains all the schedules for that day.
+                    for (int k = 0; k < p.size(); k++) {
+                        slotEntry = p.get(k).text();
+                        slotEntry = slotEntry.trim();
+                        if (!slotEntry.equals("")) {
+                            addSession(list, slotEntry);//j: Weekday
                         }
-                        days.add(list);
                     }
+                    days.add(list);
                 }
-            }
-            catch(NullPointerException nex){
-
             }
 
         }
